@@ -1,5 +1,5 @@
 Antarctica Data Analyst Assignment – CO₂ Emission Analysis & Sustainable IT Strategies
-
+Author: Omkar Ugale
 This repository contains the complete solution for the Data Analyst Assignment given by Antarctica Global, focusing on global emission trends, digital infrastructure sustainability, and actionable IT decarbonization strategies.
 🚀 Project Overview
 This project analyzes global CO₂ emissions from 1980–2023 using the Our World in Data (OWID) dataset.
@@ -34,26 +34,8 @@ Data centre share of global CO₂
 <img width="1280" height="612" alt="Figure_3" src="https://github.com/user-attachments/assets/5f7f2ed4-a85d-4223-81f8-7eebcc3d98f1" />
 
 🧭 Strategic Sustainable IT Recommendations
-
 Region-aware workload placement
 Low-carbon time-based job scheduling
 Energy-efficient AI model optimization
 Hardware lifecycle optimization
 Enhanced ESG reporting for digital emissions
-
-
-
-🛠️ Technologies & Libraries Used
-Python
-Pandas, NumPy
-Matplotlib, Seaborn
-Scikit-learn (for simple projections)
-Jupyter Notebook
-
-======================================================================================================================================
-🔗 Author
-
-Omkar Ugale
-Aspiring Data Analyst | Python | SQL | AI & Sustainability
-📧 Email: omkarugale.info@gmail.com
-======================================================================================================================================
