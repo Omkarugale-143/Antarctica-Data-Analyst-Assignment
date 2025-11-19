@@ -13,7 +13,7 @@ from sklearn.linear_model import LinearRegression
 # LOAD DATASET
 
 
-DATA_PATH = r"C:/Users/OMKAR/Downloads/Data Analyst Practice/owid-co2-data.csv"
+DATA_PATH = "C:/Users/OMKAR/Downloads/Data Analyst Practice/Data/owid-co2-data.csv"
 
 df_raw = pd.read_csv(DATA_PATH, low_memory=False)
 print("Raw dataset loaded.")
