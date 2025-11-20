@@ -50,153 +50,131 @@ for col in ["year", "co2", "co2_per_capita",
 df = df.dropna(subset=["co2", "primary_energy_consumption", "energy_per_capita"])
 print("Cleaned dataset shape:", df.shape)
 
-
 # Q1 — GLOBAL EMISSIONS PROJECTION (NEXT 5 YEARS)
 
 
 print("\n================ Q1: Global CO2 Emission Projection ================\n")
-
-df_world = df_raw[df_raw["country"] == "World"].copy()
-df_world = df_world[df_world["year"] >= 1980]
-df_world = df_world.dropna(subset=["co2"])
+df_world = df_raw[df_raw["country"] == "World"]
+df_world = df_world[df_world["year"] >= 1980].dropna(subset=["co2"])
 
 X = df_world["year"].values.reshape(-1, 1)
 y = df_world["co2"].values
 
 model = LinearRegression()
 model.fit(X, y)
+pred = model.predict(X)
+
+# Confidence interval
+y_err = y - pred
+y_std = np.std(y_err)
+conf = 1.96 * y_std
 
 future_years = np.arange(df_world["year"].max() + 1, df_world["year"].max() + 6)
 future_preds = model.predict(future_years.reshape(-1, 1))
 
-# Plot
-plt.figure(figsize=(10, 5))
-plt.plot(df_world["year"], df_world["co2"], label="Historical CO₂")
-plt.plot(future_years, future_preds, "r--", label="Projected CO₂ (Next 5 Years)")
+plt.figure(figsize=(12, 6))
+plt.plot(df_world["year"], y, label="Actual CO₂", linewidth=2)
+plt.plot(df_world["year"], pred, label="Trend Line", linestyle='--')
+
+plt.fill_between(df_world["year"], pred - conf, pred + conf, alpha=0.2, label="95% Confidence")
+
+plt.plot(future_years, future_preds, "ro--", label="Forecast")
+plt.title("Global CO₂ Emission Trend + 5-Year Forecast")
 plt.xlabel("Year")
-plt.ylabel("CO₂ Emissions (million tonnes)")
-plt.title("Global CO₂ Emissions Projection (Q1)")
+plt.ylabel("CO₂ Emissions")
 plt.legend()
-plt.tight_layout()
 plt.show()
 
-print("Projected CO2 emissions (Q1):")
-print(pd.DataFrame({"year": future_years, "projected_co2": future_preds}))
+# Q2 — Cloud Region Carbon Intensity (Advanced Multi-Year Visuals)
 
 
+print("\n================Q2 — Cloud Region Carbon Intensity (Advanced Multi-Year Visuals) ================\n")
 
-# Q2 — CLOUD REGION CARBON INTENSITY COMPARISON
+regions = [
+    "United States", "Canada", "Brazil",
+    "Ireland", "United Kingdom", "Germany", "France", "Netherlands",
+    "India", "Japan", "South Korea", "Singapore", "Australia",
+    "United Arab Emirates"
+]
 
-
-print("\n================ Q2: Cloud Region Carbon Intensity ================\n")
-
-regions = ["United States", "China", "India", "Germany", "Singapore", "Ireland"]
 df_regions = df[df["country"].isin(regions)].copy()
 
-latest_year = df_regions["year"].max()
-df_latest = df_regions[df_regions["year"] == latest_year].dropna(subset=["co2_per_unit_energy"])
+max_year = df_regions["year"].max()
+years = list(range(max_year - 4, max_year + 1))
 
-df_latest["carbon_intensity"] = df_latest["co2_per_unit_energy"]
+df_5yrs = df_regions[df_regions["year"].isin(years)]
+pivot_df = df_5yrs.pivot(index="country", columns="year",
+                         values="co2_per_unit_energy").reindex(regions)
 
-plt.figure(figsize=(10, 5))
-plt.bar(df_latest["country"], df_latest["carbon_intensity"])
-plt.xticks(rotation=45)
-plt.ylabel("CO₂ per unit energy")
-plt.xlabel("Cloud Region")
-plt.title(f"Carbon Intensity of Cloud Regions ({latest_year}) (Q2)")
-plt.tight_layout()
+print("Years analyzed:", years)
+print("\n5-Year Carbon Intensity Table:")
+print(pivot_df)
+
+plt.figure(figsize=(14, 7))
+bar_width = 0.12
+x = np.arange(len(regions))
+
+for i, year in enumerate(years):
+    plt.bar(x + i * bar_width, pivot_df[year], bar_width, label=str(year))
+
+plt.xticks(x + bar_width*2, regions, rotation=45)
+plt.ylabel("CO₂ per Unit Energy")
+plt.title("Carbon Intensity for Cloud Regions (Past 5 Years - Grouped Bar Chart)")
+plt.legend()
 plt.show()
 
-print(df_latest[["country", "carbon_intensity"]])
+plt.figure(figsize=(10, 5))
+sns.heatmap(pivot_df, annot=True, cmap="coolwarm", linewidths=0.5)
+plt.title("Heatmap of Carbon Intensity Over 5 Years")
+plt.show()
 
-
-
-# Q3 — DATA CENTER CO2 VS NATIONAL EMISSIONS
-
-
-print("\n================ Q3: Data Center CO2 vs Countries ================\n")
+# Q3 — Data Center vs Nations (Advanced Benchmark Visuals)
+print("======Q3 — Data Center vs Nations (Advanced Benchmark Visuals)=========")
 
 df_world_latest = df_world[df_world["year"] == df_world["year"].max()]
 world_year = int(df_world_latest["year"].iloc[0])
 world_co2 = df_world_latest["co2"].iloc[0]
 
-data_center_co2 = 0.02 * world_co2  # Assuming 2% estimate
+data_center_co2 = 0.02 * world_co2
 
-# Pie chart
-labels = ["Data Centers (2% Est.)", "Rest of World"]
-sizes = [data_center_co2, world_co2 - data_center_co2]
+print("World Year:", world_year)
+print("World CO₂:", world_co2)
+print("Estimated Data Center CO₂ (2%):", data_center_co2)
 
-plt.figure(figsize=(7, 7))
-plt.pie(sizes, labels=labels, autopct="%1.1f%%", startangle=90)
-plt.title(f"Data Center Share of Global CO₂ ({world_year}) (Q3)")
-plt.show()
+countries = ["United States", "Canada", "Brazil",
+    "Ireland", "United Kingdom", "Germany", "France", "Netherlands",
+    "India", "Japan", "South Korea", "Singapore", "Australia",
+    "United Arab Emirates"]
+df_big = df[df["country"].isin(countries)]
+df_big_latest = df_big[df_big["year"] == world_year][["country", "co2"]]
 
-# Compare to major countries
-countries = ["United States", "China", "India", "Germany"]
-df_countries = df[df["country"].isin(countries)]
-df_countries_latest = df_countries[df_countries["year"] == world_year][["country", "co2"]]
-
-comparison = pd.concat([
-    df_countries_latest,
+compare_df = pd.concat([
+    df_big_latest,
     pd.DataFrame([{"country": "Data Centers (Est.)", "co2": data_center_co2}])
-])
+]).sort_values("co2")
 
-comparison = comparison.sort_values("co2", ascending=False)
+print("\nComparison Table:")
+print(compare_df)
 
-plt.figure(figsize=(10, 6))
-plt.bar(comparison["country"], comparison["co2"])
-plt.xticks(rotation=45)
-plt.ylabel("CO₂ Emissions (Mt)")
-plt.title(f"Data Centers vs Major Countries ({world_year}) (Q3)")
-plt.show()
+# Donut chart
+sizes = [data_center_co2, world_co2 - data_center_co2]
+labels = ["Data Centers", "Rest of World"]
 
-print(comparison)
-
-
-# ============================================================
-# Q4 — ESG REPORTING BLIND SPOTS
-
-
-print("\n================ Q4: ESG Reporting Blind Spots ================\n")
-
-missing_fraction = df_raw.isna().mean().sort_values(ascending=False)
-print("\nTop missing columns:\n", missing_fraction.head(20))
-
-df_intensity = df_raw[df_raw["iso_code"].str.len() == 3]
-df_intensity = df_intensity[df_intensity["year"] >= 1980]
-
-df_intensity["missing_co2_intensity"] = df_intensity["co2_per_unit_energy"].isna()
-
-missing_countries = df_intensity[df_intensity["missing_co2_intensity"] == True]["country"].unique()
-
-print("\nCountries missing CO₂ intensity data:", len(missing_countries))
-print(missing_countries[:20])
-
-
-
-# Q5 — SUSTAINABLE IT STRATEGIES (SUPPORTING CHART)
-
-
-print("\n================ Q5: Sustainable IT Strategies ================\n")
-
-regions_trend = ["United States", "China", "India", "Germany"]
-df_trend = df[df["country"].isin(regions_trend)].copy()
-
-plt.figure(figsize=(10, 6))
-for country in regions_trend:
-    df_temp = df_trend[df_trend["country"] == country]
-    plt.plot(df_temp["year"], df_temp["co2_per_unit_energy"], label=country)
-
-plt.xlabel("Year")
-plt.ylabel("CO₂ per unit energy")
-plt.title("Carbon Intensity Trends in Major Regions (Q5)")
-plt.legend()
+plt.figure(figsize=(7,7))
+plt.pie(sizes, labels=labels, autopct="%1.1f%%", pctdistance=0.85)
+centre = plt.Circle((0,0), 0.60, fc='white')
+fig = plt.gcf()
+fig.gca().add_artist(centre)
+plt.title("Data Centers' Share of Global CO₂ (Donut Chart)")
 plt.tight_layout()
 plt.show()
 
-print("Q5 chart completed. Use this trend for strategic recommendations.")
+# Horizontal bar chart
+plt.figure(figsize=(10,6))
+plt.barh(compare_df["country"], compare_df["co2"])
+plt.xlabel("CO₂ Emissions (Mt)")
+plt.title("Data Center CO₂ vs Major Countries")
+plt.tight_layout()
+plt.show()
 
-# ============================================================
-# END OF SCRIPT
-# ============================================================
-print("\nAnalysis Completed Successfully.")
+print("Data Analyzed Successfully!!")
