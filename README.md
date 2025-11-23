@@ -19,23 +19,17 @@ Which Sustainable IT strategies deliver the highest impact?
 📈 Generated Visualizations
 
 Global CO₂ emissions projection
-<img width="1000" height="500" alt="Figure_1" src="https://github.com/user-attachments/assets/c8f4b386-3dba-4fa3-b676-71db0e5b84dd" />
+<img width="1920" height="967" alt="Figure_1" src="https://github.com/user-attachments/assets/3b5833ab-779d-483c-bc10-2e4621f86786" />
+
 
 Cloud region carbon intensity comparison
-<img width="1000" height="500" alt="Figure_2" src="https://github.com/user-attachments/assets/521b12f2-348a-4700-bf48-35103c0c22b8" />
+<img width="1400" height="700" alt="Figure_2" src="https://github.com/user-attachments/assets/e4c12973-9e47-4d46-bf0b-f12760b19753" />
+
+<img width="1000" height="500" alt="Figure_3" src="https://github.com/user-attachments/assets/e0ae8121-1eee-499c-ae74-defbebf14e46" />
 
 Data centre vs national emissions (2024 estimate)
-<img width="1280" height="612" alt="Figure_4" src="https://github.com/user-attachments/assets/11260fc5-93d5-4776-9f41-af4d7a0fab51" />
-
-Carbon intensity trends by region
-<img width="1280" height="612" alt="Figure_5" src="https://github.com/user-attachments/assets/da49e054-6430-458f-be97-26262ea71db5" />
+<img width="700" height="700" alt="Figure_4" src="https://github.com/user-attachments/assets/120478c7-c3fd-4a6e-929e-61952a50543a" />
 
 Data centre share of global CO₂
-<img width="1280" height="612" alt="Figure_3" src="https://github.com/user-attachments/assets/5f7f2ed4-a85d-4223-81f8-7eebcc3d98f1" />
+<img width="1000" height="600" alt="Figure_5" src="https://github.com/user-attachments/assets/9d58550b-5f5c-4066-8da1-f4870ef5c693" />
 
-🧭 Strategic Sustainable IT Recommendations
-Region-aware workload placement
-Low-carbon time-based job scheduling
-Energy-efficient AI model optimization
-Hardware lifecycle optimization
-Enhanced ESG reporting for digital emissions
