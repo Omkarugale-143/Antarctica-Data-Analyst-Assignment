@@ -1,4 +1,4 @@
-Antarctica Data Analyst Assignment – CO₂ Emission Analysis & Sustainable IT Strategies
+CO₂ Emission Analysis & Sustainable IT Strategies
 Author: Omkar Ugale
 This repository contains the complete solution for the Data Analyst Assignment given by Antarctica Global, focusing on global emission trends, digital infrastructure sustainability, and actionable IT decarbonization strategies.
 🚀 Project Overview
